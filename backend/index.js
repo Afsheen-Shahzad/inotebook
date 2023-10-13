@@ -10,6 +10,9 @@ app.get('/', (req, res) => {
   res.send('Hello Afsheen!')
 })
 
+app.use(express.json());
+
+
 ///Available Routes
 
 app.use('/api/auth', require('./routes/auth'))
