@@ -3,7 +3,7 @@ const mongoURI = "mongodb://localhost:27017";
 
 
 const connectToMongo = async () => {
-    mongoose.connect("mongodb://localhost:27017/schooldb",{
+    mongoose.connect("mongodb://localhost:27017/inotebook",{
     family: 4,
 }).then(() => {
     console.log("connection successfully ");
