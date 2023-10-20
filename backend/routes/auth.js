@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('../models/User');
+const fetchuser = require('../middleware/fetchuser');
 
 const { body, validationResult } = require('express-validator');
 
@@ -10,7 +11,7 @@ const router = express.Router();
 var jwt = require('jsonwebtoken');
 const JWT_secret = "harryisagoodboy";
 
-//End point 1 = create a user using : POST '/api/auth/createuser' endpoint. It doesn't required authentication 
+//Route / End point 1 = create a user using : POST '/api/auth/createuser' endpoint. It doesn't required authentication 
 
 //router.get('/',(req,res)=>{
 router.post('/createuser', [
@@ -57,7 +58,7 @@ router.post('/createuser', [
   }
 })
 
-// End Point 2 = Authenticate a user using: POST
+// Route / End Point 2 = Authenticate a user using: POST "api/auth/login".No login required
 router.post('/login',[
   body("email","enetr a valid email").isEmail(),
   body("password","Password cannot be blank").exists()
@@ -95,7 +96,24 @@ router.post('/login',[
   }
 })
 
+// Route / End point 3 = Get user details using: POST "api/auth/getuser". login required
 
+  router.post('/getuser', fetchuser, async(req,res)=>{
+    //if there are errors, return baad request and errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      userID=req.user.id;
+      let user = await User.findById(userID).select("-password");
+      res.send(user);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal server error occured")
+    }
+  })
 
 module.exports = router;
 
