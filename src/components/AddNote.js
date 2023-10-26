@@ -1,7 +1,7 @@
 import React,{useContext, useState} from 'react'
 import NoteContext from '../Context/notes/NoteContext';
 
-const AddNote = () => {
+const AddNote = (props) => {
 
 
     const context = useContext(NoteContext)
@@ -13,6 +13,7 @@ const AddNote = () => {
         addNote(note.title,note.description,note.tags)
         ///after adding teh note the values in the input field will vanish
         setnote({title:'',description:'',tags:''});
+        props.showAlert('Note added successfully','success')
     }
 
     const onChange = (event)=>{

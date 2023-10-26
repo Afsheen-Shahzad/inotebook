@@ -21,16 +21,20 @@ router.post('/createuser', [
   body('email', 'Enter valid email').isEmail()
   /////https://express-validator.github.io/docs/6.15.0/
 ], async (req, res) => {
+
+  let success=false;
+
   //if there are errors, return baad request and errors
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({errors: errors.array() });
   }
   //check whether the user with this email exists already
   try {
     let user = await User.findOne({ email: req.body.email })
     if (user) {
-      return res.status(400).json({ error: "sorry a user with this email is already exists" });
+      return res.status(400).json({success, error: "sorry a user with this email is already exists" });
+      success=false;
     }
     //v use await bcoz it returens a promise
     //https://www.npmjs.com/package/bcryptjs
@@ -50,7 +54,8 @@ router.post('/createuser', [
     }
     const authToken = jwt.sign(data, JWT_secret);
     console.log(authToken)
-    res.json({ authToken })
+    success=true;
+    res.json({success, authToken })
     //res.json(user);
   } catch (error) {
     console.error(error.message);
