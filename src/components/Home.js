@@ -1,7 +1,13 @@
 import React from 'react'
+import Notes from './Notes'
 
 export const Home = () => {
+
+  
   return (
-    <div>This is Home</div>
+    <div>
+      
+      <Notes></Notes>
+    </div>
   )
 }

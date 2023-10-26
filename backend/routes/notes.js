@@ -9,8 +9,11 @@ const { body, validationResult } = require('express-validator');
 //Rout/Endpoint 1 = Get all the notes using: GET "api/notes/fetchallnotes". login required
 router.get('/fetchallnotes', fetchuser, async (req, res) => {
 
-
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
         const notes = await Notes.find({ user: req.user.id })
         res.json(notes);
     } catch (error) {
@@ -61,9 +64,11 @@ router.put('/updatenote/:id', fetchuser, [
     if(description){
         newNote.description = description;
     }
+    
     if(tags){
         newNote.tags=tags;
     }
+    
     //find teh note to be updated and update it
     let note=await Notes.findById(req.params.id) // this is the id which comes with '/updatenote:id'
     if(!note){

@@ -4,9 +4,9 @@ import NoteContext from '../Context/notes/NoteContext'
 const About = () => {
   const a = useContext(NoteContext);
   
-  
+  const {s1} = a
   return (
-    <div>This is About {a.name} and class is {a.class}</div>
+    <div>This is About {s1.name} and class is {s1.class}</div>
   )
 }
 
